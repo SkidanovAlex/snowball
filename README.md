@@ -41,4 +41,4 @@ Current training algorithm is A3C. To start training
     python run.py rl
 
 # Credits
-This code is copied from a private branch, and is initially built by [https://github.com/mfornet](Marcelo Fornet).
+This code is copied from a private branch, and is initially built by [Marcelo Fornet](https://github.com/mfornet).
