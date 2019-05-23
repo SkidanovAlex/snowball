@@ -8,6 +8,8 @@ class Strategy:
     EQUAL_SPLIT = 2
     RL = 3
     NON_ANSWER = 4
+    BREAK_SAFETY = 5
+    BREAK_LIVENESS = 6
 
 
 class AugmentedSnowballParticipant(SnowballParticipant):
@@ -27,7 +29,7 @@ class AugmentedSnowballParticipant(SnowballParticipant):
         else:
             return super().is_finished()
 
-    def respond_to_query(self, from_id, color, participants_objects=None):
+    def respond_to_query(self, from_id, color, participants_objects=None, iteration=None):
         if self.adversary:
             # Use private information stored on `self.participants`
 
@@ -67,6 +69,28 @@ class AugmentedSnowballParticipant(SnowballParticipant):
                     return color
                 else:
                     return None
+            elif self.strategy == Strategy.BREAK_LIVENESS:
+                if iteration < 100000:
+                    # Return less frequent color
+                    # This strategy tries greedily to balance participants
+                    snowball_map = {False: 0, True: 0}
+                    for par_id in self.participants:
+                        par = participants_objects[par_id]
+                        snowball_map[par.color] += 1
+
+                    return snowball_map[True] < snowball_map[False]
+                else:
+                    return color
+
+            elif self.strategy == Strategy.BREAK_SAFETY:
+                # Split agents into two groups.
+                assert iteration is not None
+                if iteration < 100000:
+                    return from_id % 200 >= 100
+                elif iteration < 1000000:
+                    return from_id % 200 >= 110
+                else:
+                    return True
             else:
                 raise AssertionError(self.strategy)
         else:

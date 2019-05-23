@@ -44,7 +44,7 @@ class SnowballProtocol:
 
         def query_method(part_id, participants, color, callback):
             return callback(
-                [self.participant_objects[participant_id].respond_to_query(part_id, color, self.participant_objects) for
+                [self.participant_objects[participant_id].respond_to_query(part_id, color, self.participant_objects, iteration=self.iteration) for
                  participant_id in participants])
 
         self.query_method = query_method
