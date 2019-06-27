@@ -61,6 +61,7 @@ class SnowballParticipant:
             current_votes.keys()))
 
         if len(winning_vote) == 0:
+            self.count = 0
             return participants, votes
 
         vote = winning_vote[0]

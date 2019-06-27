@@ -87,10 +87,17 @@ class AugmentedSnowballParticipant(SnowballParticipant):
                 assert iteration is not None
                 if iteration < 100000:
                     return from_id % 200 >= 100
-                elif iteration < 1000000:
-                    return from_id % 200 >= 110
                 else:
-                    return True
+                    has_finished = False
+                    for par_id in self.participants[:10]:
+                        par = participants_objects[par_id]
+                        if par.is_finished():
+                            has_finished = True
+                    if not has_finished:
+                        return from_id % 200 >= 110
+                    else:
+                        print('.')
+                        return True
             else:
                 raise AssertionError(self.strategy)
         else:
